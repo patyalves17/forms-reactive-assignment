@@ -35,11 +35,11 @@ export class AppComponent implements OnInit {
   AsyncValidadeProjetName(control: FormControl ) : Promise<any> | Observable<any> {
     const promise = new Promise((resolve,reject) => {
       setTimeout(() => {
-        if(control.value === 'paty' ){
+        if(control.value === 'Test2' ){
           resolve( { 'namesIsForbidden': true } );
         }
         resolve(null);
-      }, 1500);
+      }, 1000);
     });
 
     return promise;
