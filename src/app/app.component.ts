@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { reject } from 'q';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.projetForm = new FormGroup({
-      'projectName': new FormControl(null, Validators.required),
+      'projectName': new FormControl(null, [Validators.required, this.validadeProjetName], this.AsyncValidadeProjetName),
       'email': new FormControl(null, [Validators.required, Validators.email]),
       'projectStatus': new FormControl('finished'),
 
@@ -20,5 +22,27 @@ export class AppComponent implements OnInit {
 
   onSubmit() {
     console.log(this.projetForm);
+  }
+
+
+  validadeProjetName(control: FormControl): {[s: string]: boolean} {
+    if (control.value === 'Test') {
+      return { 'namesIsForbidden': true };
+    }
+    return null;
+  }
+
+  AsyncValidadeProjetName(control: FormControl ) : Promise<any> | Observable<any> {
+    const promise = new Promise((resolve,reject) => {
+      setTimeout(() => {
+        if(control.value === 'paty' ){
+          resolve( { 'namesIsForbidden': true } );
+        }
+        resolve(null);
+      }, 1500);
+    });
+
+    return promise;
+
   }
 }
